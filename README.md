@@ -81,9 +81,13 @@ Prohibido usar numpy o librerías similares para cálculos (solo SymPy).
 
 Recomendado:
 
-`sympy para el parser y cálculos`
+```
+sympy para el parser y cálculos
+```
 
-`matplotlib para gráficos`
+```
+matplotlib para gráficos
+```
 
 El parser está restringido a un conjunto seguro de funciones para evitar ejecución arbitraria de código.
 
