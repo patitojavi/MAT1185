@@ -55,7 +55,9 @@ pip install sympy matplotlib
 ```
 3. Ejecuta la aplicación:
 
-```python main.py```
+```
+python main.py
+```
 
 4. Uso
 ```
