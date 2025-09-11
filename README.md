@@ -24,14 +24,14 @@ El programa permite:
 
 ## Estructura del Proyecto
 
-`
+```
 / EV2
 └─ main.py # Punto de entrada de la aplicación
 └─ parser.py # Parser de funciones (entrada → SymPy)
 └─ analyzer.py # Análisis matemático (dominio, recorrido, raíces, etc.)
 └─ plotter.py # Generación de gráficas con Matplotlib
 └─ gui.py # GUI en Tkinter
-`
+```
 
 
 ---
