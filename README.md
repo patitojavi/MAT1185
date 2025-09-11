@@ -55,9 +55,9 @@ pip install sympy matplotlib
 `
 ## Ejecuta la aplicación:
 
-python main.py
-🖥️ Uso
-Ingresa una función en el campo f(x) =.
+`python main.py`
+## Uso
+`Ingresa una función en el campo f(x) =.`
 
 Ejemplo: sin(x) + 1/x
 
@@ -65,9 +65,9 @@ Funciones permitidas: sin, cos, tan, exp, log, sqrt, ...
 
 (Opcional) Ingresa un valor de x para evaluarla.
 
-Presiona “Analizar y Graficar”.
+`Presiona “Analizar y Graficar”.`
 
-Verás:
+`Verás:`
 
 El dominio y recorrido calculados
 
