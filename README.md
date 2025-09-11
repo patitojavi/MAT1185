@@ -50,31 +50,27 @@ El programa permite:
 1. Clona este repositorio o descarga el código.
 2. Instala las dependencias:
 
-`
+```
 pip install sympy matplotlib
-`
-## Ejecuta la aplicación:
+```
+3. Ejecuta la aplicación:
 
-```python main.py
-## Uso
+```python main.py```
+
+4. Uso
+```
 Ingresa una función en el campo f(x) =.
-
 Ejemplo: sin(x) + 1/x
-
 Funciones permitidas: sin, cos, tan, exp, log, sqrt, ...
-
 (Opcional) Ingresa un valor de x para evaluarla.
-
 Presiona “Analizar y Graficar”.
+```
 
-Verás:
-
+5. Resultado:
+```
 El dominio y recorrido calculados
-
 Las intersecciones con los ejes
-
 El cálculo paso a paso en el punto elegido
-
 El gráfico correspondiente
 ```
 
