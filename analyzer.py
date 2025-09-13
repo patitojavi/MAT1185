@@ -57,9 +57,20 @@ class FunctionAnalyzer:
         return None
 
     def _steps_for_value(self, x0: float) -> Tuple[Optional[str], Optional[float]]:
-        """Texto paso a paso y valor numérico para x = x0."""
+        """Texto paso a paso y valor numérico para x = x0, con mensaje especial para funciones racionales."""
+        expr_str = sp.sstr(self.expr)
+        # Detectar si el denominador depende de x y se anula en x0
+        numer, denom = sp.fraction(self.expr)
+        if denom.has(x):
+            denom_val = denom.subs(x, x0)
+            if denom_val == 0:
+                msg = (
+                    f"f(x) = {expr_str}\n"
+                    f"Sustituyendo x = {x0} ⇒ el denominador se anula: {sp.sstr(denom)} = 0.\n"
+                    f"La función racional no está definida en x = {x0} (división por cero)."
+                )
+                return (msg, None)
         try:
-            expr_str = sp.sstr(self.expr)
             sub_expr = self.expr.subs(x, x0)
             sub_str = sp.sstr(sub_expr)
             val = float(sp.N(sub_expr))
@@ -70,6 +81,19 @@ class FunctionAnalyzer:
             ]
             return ("\n".join(lines), val)
         except Exception as e:
+            # Mensaje especial si el denominador se anula (para expresiones no detectadas como racionales)
+            try:
+                numer, denom = sp.fraction(self.expr)
+                denom_val = denom.subs(x, x0)
+                if denom_val == 0:
+                    msg = (
+                        f"f(x) = {expr_str}\n"
+                        f"Sustituyendo x = {x0} ⇒ el denominador se anula: {sp.sstr(denom)} = 0.\n"
+                        f"La función racional no está definida en x = {x0} (división por cero)."
+                    )
+                    return (msg, None)
+            except Exception:
+                pass
             return (f"No se pudo evaluar en x = {x0}. Detalle: {e}", None)
 
     def analyze(self, x_value: Optional[float] = None) -> AnalysisReport:
