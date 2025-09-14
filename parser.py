@@ -57,7 +57,8 @@ class FunctionParser:
     def parse(self, text: str) -> ParseResult:
         if not isinstance(text, str) or not text.strip():
             raise ValueError("Ingresa una función no vacía, por ejemplo: sin(x) + 1/x")
-        cleaned = text.strip()
+        cleaned = text.strip().replace("^", "**")
+
         try:
             expr = sp.sympify(cleaned, locals=self._locals, evaluate=True)
         except Exception as e:

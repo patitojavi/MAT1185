@@ -12,6 +12,8 @@ class AnalysisReport:
     x_intercepts: List[str] # intersecciones con eje X como textos
     y_intercept: Optional[str] # intersección con eje Y como texto
     steps_for_x: Optional[str] # paso a paso para evaluar en x, si se pidió
+    steps_y_intercept: Optional[str]
+    steps_x_intercepts: Optional[str]
 
 class FunctionAnalyzer:
     """Calcula dominio, recorrido, cortes con ejes y un paso a paso para evaluar en un punto."""
@@ -95,6 +97,33 @@ class FunctionAnalyzer:
             except Exception:
                 pass
             return (f"No se pudo evaluar en x = {x0}. Detalle: {e}", None)
+        
+    def _steps_y_intercept(self, domain) -> Optional[str]:
+    # Reusa el evaluador que ya maneja divisiones por cero
+        if 0 not in domain:
+            return "La función no está definida en x = 0, no hay corte con Y."
+        txt, _ = self._steps_for_value(0)
+        return "Intersección con eje Y (x=0):\n" + (txt or "")
+
+
+    def _steps_x_intercepts(self, domain) -> Optional[str]:
+        lines = [f"Intersecciones con eje X (resolver f(x)=0):",
+             f"f(x) = {sp.sstr(self.expr)}",
+             "Resolver: f(x) = 0"]
+        try:
+            sol = sp.solveset(sp.Eq(self.expr, 0), x, domain=domain)
+            if isinstance(sol, sp.sets.FiniteSet):
+                reales = [sp.nsimplify(s) for s in sol if s.is_real]
+                if reales:
+                    lines.append("Soluciones reales en el dominio: " +
+                             ", ".join([f"x = {s}" for s in reales]))
+                else:
+                    lines.append("No hay soluciones reales en el dominio.")
+            else:
+                lines.append(f"No se obtuvo un conjunto finito simbólico: {sol}")
+        except Exception as e:
+            lines.append(f"No se pudo resolver simbólicamente. Detalle: {e}")
+        return "\n".join(lines)
 
     def analyze(self, x_value: Optional[float] = None) -> AnalysisReport:
         dom = self._domain()
@@ -111,6 +140,8 @@ class FunctionAnalyzer:
         steps = None
         if x_value is not None:
             steps, _ = self._steps_for_value(x_value)
+        stepsY = self._steps_y_intercept(dom)
+        stepsX = self._steps_x_intercepts(dom)
 
         return AnalysisReport(
             expr_str=str(self.expr),
@@ -118,5 +149,6 @@ class FunctionAnalyzer:
             range_str=range_str,
             x_intercepts=xints_strs,
             y_intercept=yint_str,
-            steps_for_x=steps
-        )
+            steps_for_x=steps, steps_y_intercept=stepsY,
+            steps_x_intercepts=stepsX,
+)
