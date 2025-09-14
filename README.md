@@ -1,95 +1,45 @@
-# MAT1185
 
-# Analizador de Funciones en Python
+# Analizador de Funciones Matemáticas
 
-Este proyecto implementa un **analizador gráfico de funciones matemáticas** con **interfaz gráfica de usuario (Tkinter)**, usando **SymPy** para el cálculo simbólico y **Matplotlib** para la visualización.
+Este proyecto es una aplicación en Python que permite analizar funciones matemáticas mediante una interfaz gráfica intuitiva. El usuario puede ingresar una función y un valor de x para evaluar, obteniendo el dominio, recorrido, intersecciones con los ejes y el desarrollo computacional paso a paso. Además, se genera una gráfica profesional resaltando el punto evaluado.
 
----
+## Características
+- Ingreso de funciones matemáticas en formato natural (ejemplo: `sin(x) + 1/x`)
+- Cálculo automático de dominio, recorrido y cortes con los ejes
+- Evaluación de la función en un punto específico, mostrando el paso a paso
+- Gráfica profesional con Matplotlib, resaltando intersecciones y el punto evaluado
+- Manejo robusto de errores (entradas inválidas, divisiones por cero, etc.)
+- Interfaz gráfica amigable con Tkinter
+- Estructura modular: `main.py`, `parser.py`, `analyzer.py`, `plotter.py`, `gui.py`
 
-## Objetivo
-
-El programa permite:
-- Ingresar una función matemática `f(x)` y (opcionalmente) un valor de `x`.
-- Analizar la función para obtener:
-  - **Dominio**
-  - **Recorrido**
-  - **Intersecciones con los ejes X e Y**
-- Evaluar la función en un punto dado, mostrando el **paso a paso** del cálculo.
-- Generar una **gráfica clara y profesional** con:
-  - La función original
-  - Sus intersecciones
-  - El punto evaluado resaltado en otro color, sin alterar la gráfica base
-
----
-
-## Estructura del Proyecto
-
-```
-/ EV2
-└─ main.py # Punto de entrada de la aplicación
-└─ parser.py # Parser de funciones (entrada → SymPy)
-└─ analyzer.py # Análisis matemático (dominio, recorrido, raíces, etc.)
-└─ plotter.py # Generación de gráficas con Matplotlib
-└─ gui.py # GUI en Tkinter
-```
-
-
----
-
-## Tecnologías Utilizadas
-
-- [Python 3.x](https://www.python.org/)
-- [SymPy](https://www.sympy.org/) → manipulación y análisis simbólico
-- [Matplotlib](https://matplotlib.org/) → graficación
-- [Tkinter](https://docs.python.org/3/library/tkinter.html) → interfaz gráfica
-
----
+## Requisitos
+- Python 3.8+
+- sympy
+- matplotlib
+- tkinter (incluido en la mayoría de instalaciones de Python)
 
 ## Instalación
-
-1. Clona este repositorio o descarga el código.
+1. Clona el repositorio:
+   ```
+   git clone https://github.com/patitojavi/MAT1185.git
+   ```
 2. Instala las dependencias:
+   ```
+   pip install sympy matplotlib
+   ```
 
-```
-pip install sympy matplotlib
-```
-3. Ejecuta la aplicación:
-
-```
+## Uso
+Ejecuta el programa principal:
+```bash
 python main.py
 ```
 
-4. Uso
-```
-Ingresa una función en el campo f(x) =.
-Ejemplo: sin(x) + 1/x
-Funciones permitidas: sin, cos, tan, exp, log, sqrt, ...
-(Opcional) Ingresa un valor de x para evaluarla.
-Presiona “Analizar y Graficar”.
-```
+## Estructura del proyecto
+- `main.py`: Punto de entrada de la aplicación
+- `gui.py`: Interfaz gráfica
+- `parser.py`: Parseo seguro de funciones
+- `analyzer.py`: Análisis matemático (dominio, recorrido, intersecciones, paso a paso)
+- `plotter.py`: Generación de gráficos
 
-5. Resultado:
-```
-El dominio y recorrido calculados
-Las intersecciones con los ejes
-El cálculo paso a paso en el punto elegido
-El gráfico correspondiente
-```
-
-## Restricciones
-Prohibido usar numpy o librerías similares para cálculos (solo SymPy).
-
-Recomendado:
-
-```
-sympy para el parser y cálculos
-```
-
-```
-matplotlib para gráficos
-```
-
-El parser está restringido a un conjunto seguro de funciones para evitar ejecución arbitraria de código.
-
-
----
+## Licencia
+Este proyecto es de uso educativo para MAT1185.
