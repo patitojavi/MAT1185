@@ -6,22 +6,21 @@ x = sp.symbols('x')
 
 @dataclass
 class AnalysisReport:
-    expr_str: str # expresión como texto
-    domain_str: str # dominio como texto
-    range_str: str  # recorrido como texto
-    x_intercepts: List[str] # intersecciones con eje X como textos
-    y_intercept: Optional[str] # intersección con eje Y como texto
-    steps_for_x: Optional[str] # paso a paso para evaluar en x, si se pidió
+    expr_str: str 
+    domain_str: str 
+    range_str: str  
+    x_intercepts: List[str] 
+    y_intercept: Optional[str] 
+    steps_for_x: Optional[str] 
     steps_y_intercept: Optional[str]
     steps_x_intercepts: Optional[str]
 
 class FunctionAnalyzer:
-    """Calcula dominio, recorrido, cortes con ejes y un paso a paso para evaluar en un punto."""
+
     def __init__(self, expr: sp.Expr): 
         self.expr = sp.simplify(expr) 
 
     def _domain(self) -> sp.sets.Set:
-        """Usa continuous_domain; si falla, devuelve Reales."""
         from sympy.calculus.util import continuous_domain 
         try:
             return continuous_domain(self.expr, x, sp.S.Reals)
@@ -29,7 +28,6 @@ class FunctionAnalyzer:
             return sp.S.Reals
 
     def _range(self, domain: sp.sets.Set) -> Optional[sp.sets.Set]:
-        """Intenta function_range (puede no resolver para algunas funciones)."""
         try:
             from sympy.calculus.util import function_range
             return function_range(self.expr, x, domain)
@@ -59,7 +57,6 @@ class FunctionAnalyzer:
         return None
 
     def _steps_for_value(self, x0: float) -> Tuple[Optional[str], Optional[float]]:
-        """Texto paso a paso y valor numérico para x = x0, con mensaje especial para funciones racionales."""
         expr_str = sp.sstr(self.expr)
         # Detectar si el denominador depende de x y se anula en x0
         numer, denom = sp.fraction(self.expr)
@@ -83,7 +80,6 @@ class FunctionAnalyzer:
             ]
             return ("\n".join(lines), val)
         except Exception as e:
-            # Mensaje especial si el denominador se anula (para expresiones no detectadas como racionales)
             try:
                 numer, denom = sp.fraction(self.expr)
                 denom_val = denom.subs(x, x0)
@@ -99,7 +95,6 @@ class FunctionAnalyzer:
             return (f"No se pudo evaluar en x = {x0}. Detalle: {e}", None)
         
     def _steps_y_intercept(self, domain) -> Optional[str]:
-    # Reusa el evaluador que ya maneja divisiones por cero
         if 0 not in domain:
             return "La función no está definida en x = 0, no hay corte con Y."
         txt, _ = self._steps_for_value(0)

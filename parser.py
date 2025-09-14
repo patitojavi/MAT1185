@@ -2,14 +2,11 @@ from dataclasses import dataclass
 from typing import Dict, Any
 import sympy as sp
 
-# Conjunto seguro de funciones permitidas para evitar código arbitrario en sympify
 ALLOWED_FUNCS: Dict[str, Any] = {
-    # aritmética / álgebra
-    "Abs": sp.Abs,  # valor absoluto
-    "abs": sp.Abs, # valor absoluto
-    "sqrt": sp.sqrt, # raíz cuadrada
 
-    # trigonometría
+    "Abs": sp.Abs,  
+    "abs": sp.Abs, 
+    "sqrt": sp.sqrt, 
     "sin": sp.sin,
     "cos": sp.cos, 
     "tan": sp.tan,
@@ -19,25 +16,17 @@ ALLOWED_FUNCS: Dict[str, Any] = {
     "sec": sp.sec, 
     "csc": sp.csc, 
     "cot": sp.cot,
-
-    # hiperbólicas
     "sinh": sp.sinh, 
     "cosh": sp.cosh, 
     "tanh": sp.tanh,
-
-    # exp / log
     "exp": sp.exp, 
     "log": sp.log, 
     "ln": sp.log,
-
-    # varias
     "floor": sp.floor, 
     "ceiling": sp.ceiling, 
     "Piecewise": sp.Piecewise,
     "Max": sp.Max, 
     "Min": sp.Min,
-
-    # constantes
     "E": sp.E, 
     "pi": sp.pi,
 }
@@ -46,11 +35,11 @@ x = sp.symbols('x')
 
 @dataclass
 class ParseResult:
-    expr: sp.Expr  # expresión SymPy
-    text: str      # texto original/normalizado
+    expr: sp.Expr  
+    text: str      
 
 class FunctionParser:
-    """Parsea una función f(x) en texto a una expresión de SymPy permitiendo solo símbolos seguros."""
+
     def __init__(self) -> None:
         self._locals = {**ALLOWED_FUNCS, "x": x}
 
@@ -64,7 +53,6 @@ class FunctionParser:
         except Exception as e:
             raise ValueError(f"No pude interpretar la función. Revisa la sintaxis. Detalle: {e}")
 
-        # Debe depender sólo de x (o ser constante)
         free = expr.free_symbols
         if free and not (free <= {x}):
             raise ValueError("La función solo puede depender de 'x'.")

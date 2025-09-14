@@ -2,8 +2,6 @@ from dataclasses import dataclass
 from typing import Optional, Tuple, List
 import math
 import sympy as sp
-
-# Usamos backend no interactivo por defecto; la GUI pondrÃ¡ el canvas adecuado.
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -17,7 +15,6 @@ class PlotResult:
     y_value: Optional[float]
 
 class FunctionPlotter:
-    """Grafica f(x) sin usar numpy (lambdify con 'math'). Resalta un punto opcional."""
     def __init__(self, expr: sp.Expr):
         self.expr = sp.simplify(expr)
         self.f = sp.lambdify(x, self.expr, modules=["math"])
@@ -34,7 +31,6 @@ class FunctionPlotter:
                 if math.isfinite(yi):
                     xs.append(xi); ys.append(yi)
             except Exception:
-                # saltamos discontinuidades/errores
                 continue
         return xs, ys
 

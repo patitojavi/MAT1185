@@ -12,8 +12,6 @@ class AnalyzerApp:
         self.master = master
         master.title("Analizador de Funciones")
         master.geometry("1020x680")
-
-        # --- Barra superior de entrada ---
         top = ttk.Frame(master, padding=10)
         top.pack(fill="x")
 
@@ -30,37 +28,29 @@ class AnalyzerApp:
         self.analyze_btn.grid(row=0, column=4, padx=(10,0))
 
         top.columnconfigure(1, weight=1)
-
-        # --- Keypad de símbolos (nuevo) ---
         keypad = ttk.Frame(master, padding=(10,0))
         keypad.pack(fill="x", pady=(0,8))
         self._build_keypad(keypad)
-
-        # --- Paneles: resultados y gráfico ---
         mid = tk.PanedWindow(master, orient=tk.HORIZONTAL)
         mid.pack(fill="both", expand=True, padx=10, pady=(0,10))
 
-        # Resultados
         left = ttk.Frame(mid, padding=8)
         mid.add(left)
         self.results = tk.Text(left, height=20, wrap="word")
         self.results.pack(fill="both", expand=True)
 
-        # Gráfico
         right = ttk.Frame(mid, padding=8)
         mid.add(right, minsize=400)
         self.plot_area = ttk.Frame(right)
-        # IMPORTANTE: empacar el contenedor del gráfico antes de dibujar
         self.plot_area.pack(fill="both", expand=True)
 
-        # Mostrar un gráfico vacío al iniciar
+
         self._show_blank_plot()
 
         self.parser = FunctionParser()
 
-    # ------------ Keypad de símbolos ------------
     def _build_keypad(self, parent: ttk.Frame):
-        # Mapa: (texto del botón, token a insertar, acción_post_inserción)
+
         rows = [
             [("7","7",None), ("8","8",None), ("9","9",None),
              ("÷","/",None), ("×","*",None), ("−","-",None), ("+","+",None)],
@@ -75,7 +65,6 @@ class AnalyzerApp:
 
         def insert_token(token: str, post: Optional[str] = None):
             e = self.fun_entry
-            # Si hay selección, la reemplaza
             try:
                 sel_start = e.index("sel.first")
                 sel_end   = e.index("sel.last")
@@ -85,7 +74,6 @@ class AnalyzerApp:
                 pass
             idx = e.index(tk.INSERT)
             e.insert(idx, token)
-            # Post-acción: dejar cursor dentro de paréntesis
             if post == "in_parens":
                 try:
                     if token.endswith("()"):
@@ -94,7 +82,6 @@ class AnalyzerApp:
                     pass
             e.focus_set()
 
-        # Construir filas de botones
         for r, row in enumerate(rows):
             fr = ttk.Frame(parent)
             fr.pack(anchor="w", pady=2)
@@ -103,7 +90,6 @@ class AnalyzerApp:
                            command=lambda t=token, p=post: insert_token(t, p)
                            ).pack(side="left", padx=2)
 
-            # Botones de edición a la derecha de la última fila
             if r == 3:
                 ttk.Button(fr, text="DEL", width=6,
                            command=lambda: self._del_char()).pack(side="left", padx=(12,2))
@@ -117,12 +103,10 @@ class AnalyzerApp:
     def _del_char(self):
         e = self.fun_entry
         try:
-            # Si hay selección, bórrala
             sel_start = e.index("sel.first")
             sel_end   = e.index("sel.last")
             e.delete(sel_start, sel_end)
         except tk.TclError:
-            # Si no hay selección, borra el char en la posición del cursor
             idx = e.index(tk.INSERT)
             e.delete(idx)
 
@@ -133,7 +117,6 @@ class AnalyzerApp:
         e.icursor(new_idx)
         e.focus_set()
 
-    # ------------ Lógica de análisis y gráfico ------------
     def on_analyze(self):
         fx_text = self.fun_entry.get().strip()
         x_text = self.x_entry.get().strip()
@@ -155,7 +138,6 @@ class AnalyzerApp:
             self._show_blank_plot("Error al analizar — listo para reintentar")
             return
 
-        # --- Mostrar resultados ---
         self.results.delete("1.0", tk.END)
         self.results.insert(tk.END, f"Función: f(x) = {report.expr_str}\n\n")
         self.results.insert(tk.END, f"Dominio: {report.domain_str}\n")
@@ -183,7 +165,6 @@ class AnalyzerApp:
             self.results.insert(tk.END, "\nCálculo paso a paso (x evaluada):\n")
             self.results.insert(tk.END, report.steps_for_x + "\n")
 
-        # --- Dibujar gráfico ---
         for w in self.plot_area.winfo_children():
             w.destroy()
 
