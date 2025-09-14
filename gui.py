@@ -32,18 +32,18 @@ class AnalyzerApp:
         top.columnconfigure(1, weight=1)
 
         # --- Paneles: resultados y gráfico ---
-        mid = ttk.PanedWindow(master, orient=tk.HORIZONTAL)
+        mid = tk.PanedWindow(master, orient=tk.HORIZONTAL)
         mid.pack(fill="both", expand=True, padx=10, pady=(0,10))
 
         # Resultados
         left = ttk.Frame(mid, padding=8)
-        mid.add(left, weight=1)
+        mid.add(left)
         self.results = tk.Text(left, height=20, wrap="word")
         self.results.pack(fill="both", expand=True)
 
         # Gráfico
         right = ttk.Frame(mid, padding=8)
-        mid.add(right, weight=1)
+        mid.add(right, minsize=400)  # Establece ancho mínimo del panel derecho
         self.plot_area = ttk.Frame(right)
         self.plot_area.pack(fill="both", expand=True)
 
