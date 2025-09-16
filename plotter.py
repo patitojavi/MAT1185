@@ -41,6 +41,13 @@ class FunctionPlotter:
     def make_figure(self, x_value: Optional[float] = None,
                     window: Tuple[float, float] = (-10, 10)) -> PlotResult:
         xmin, xmax = window
+        # Si x_value está fuera del rango, ajusta la ventana para incluirlo
+        if x_value is not None:
+            margin = 2  # margen extra
+            if x_value < xmin:
+                xmin = x_value - margin
+            if x_value > xmax:
+                xmax = x_value + margin
         xs, ys = self.sample_points(xmin, xmax)
 
         fig, ax = plt.subplots(figsize=(6,4), dpi=110)
