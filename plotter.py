@@ -35,7 +35,9 @@ class FunctionPlotter:
         return xs, ys
 
     def make_figure(self, x_value: Optional[float] = None,
-                    window: Tuple[float, float] = (-10, 10)) -> PlotResult:
+                    window: Tuple[float, float] = (-10, 10),
+                    x_intercepts: Optional[list] = None,
+                    y_intercept: Optional[float] = None) -> PlotResult:
         xmin, xmax = window
         # Si x_value está fuera del rango, ajusta la ventana para incluirlo
         if x_value is not None:
@@ -53,16 +55,38 @@ class FunctionPlotter:
         ax.set_title("f(x)")
         ax.set_xlabel("x"); ax.set_ylabel("f(x)")
 
+        # Marcar intersecciones con eje X
+        if x_intercepts:
+            for xi in x_intercepts:
+                try:
+                    xi_val = float(xi)
+                    ax.scatter([xi_val], [0], color="red", s=50, zorder=6, label="Corte eje X" if xi == x_intercepts[0] else "")
+                except Exception:
+                    pass
+
+        # Marcar intersección con eje Y
+        if y_intercept is not None:
+            try:
+                y0 = float(y_intercept)
+                ax.scatter([0], [y0], color="green", s=50, zorder=6, label="Corte eje Y")
+            except Exception:
+                pass
+
         yv = None
         if x_value is not None:
             try:
                 yv = float(sp.N(self.expr.subs(x, x_value)))
                 if math.isfinite(yv):
-                    ax.scatter([x_value], [yv], s=40, zorder=5)
+                    ax.scatter([x_value], [yv], s=40, zorder=7, color="blue", label="Punto evaluado")
                     ax.annotate(f"({x_value:.3g}, {yv:.3g})", (x_value, yv),
                                 textcoords="offset points", xytext=(6,6))
             except Exception:
                 yv = None
+
+        # Leyenda solo si hay cortes
+        handles, labels = ax.get_legend_handles_labels()
+        if any(labels):
+            ax.legend(loc="best")
 
         ax.grid(True, alpha=0.2)
         fig.tight_layout()
