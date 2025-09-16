@@ -254,7 +254,20 @@ class AnalyzerApp:
 
         try:
             plotter = FunctionPlotter(parsed.expr)
-            pr = plotter.make_figure(x_value=x_value)
+            # Convertir intersecciones a valores numéricos si es posible
+            xints = []
+            for xi in report.x_intercepts:
+                try:
+                    xints.append(float(xi))
+                except Exception:
+                    pass
+            yint = None
+            if report.y_intercept is not None:
+                try:
+                    yint = float(report.y_intercept)
+                except Exception:
+                    pass
+            pr = plotter.make_figure(x_value=x_value, x_intercepts=xints, y_intercept=yint)
 
             # Mantén referencias en self para que no se recolecten
             self.canvas = FigureCanvasTkAgg(pr.fig, master=self.plot_area)
